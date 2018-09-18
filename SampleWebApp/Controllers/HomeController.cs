@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using System.Net.Http;
 using System.IO;
 using System.Threading.Tasks;
+using System;
 
 namespace SampleWebApp.Controllers
 {
@@ -40,13 +41,30 @@ namespace SampleWebApp.Controllers
                 }
             }
 
-            var uri = config["TestGetUri"];
+            viewModel.WebApiGetUri = config["TestGetUri"];
+            var (success, message) = await GetTestUri(viewModel.WebApiGetUri);
+            viewModel.WebApiGetResult = message;
+            viewModel.WebApiGetSuccess = success;
+
+            return View(viewModel);
+        }
+
+        private async Task<(bool,string)> GetTestUri(string uri)
+        {
             if (!string.IsNullOrEmpty(uri))
             {
-                var client = httpClientFactory.CreateClient("TestGetUri");
-                viewModel.WebApiGetResult = await client.GetStringAsync(uri);
+                var client = httpClientFactory.CreateClient(uri);
+                try
+                {
+                    var body = await client.GetStringAsync(uri);
+                    return (true,body);
+                }
+                catch(Exception e)
+                {
+                    return (false,e.Message);
+                }
             }
-            return View(viewModel);
+            return (false,"No Test Uri provided");
         }
     }
 }

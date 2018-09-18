@@ -19,6 +19,7 @@ namespace SampleWebApp.Controllers
         public string TestFile { get; set; }
 
         public string WebApiGetResult { get; set; }
-
+        public string WebApiGetUri { get; set; }
+        public bool WebApiGetSuccess { get; set; }
     }
 }

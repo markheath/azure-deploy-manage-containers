@@ -1,19 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-
-  <title>Microsoft Azure Developer: Build and Manage Containers</title>
-  <meta name="description" content="Microsoft Azure Developer: Build and Manage Containers">
-  <meta name="author" content="Mark Heath">
-
-  <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
-
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Microsoft Azure Developer: Build and Manage Containers</title>
+    <meta name="description" content="Microsoft Azure Developer: Build and Manage Containers">
+    <meta name="author" content="Mark Heath">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 </head>
-
 <body>
-    @RenderBody()
-    @RenderSection("scripts", required: false)
+<div class="text-center bg-light mb-0">
+    <h1>Microsoft Azure Developer: Build and Manage Containers</h1>
+    <p>Learn how to deploy your containers to Azure</p>
+</div>
+<div class="container">
+@RenderBody()
+</div>
+@RenderSection("scripts", required: false)
 </body>
 </html>
