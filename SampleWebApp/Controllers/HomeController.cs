@@ -29,16 +29,11 @@ namespace SampleWebApp.Controllers
             viewModel.HostName = System.Net.Dns.GetHostName();
             viewModel.TestSetting = config["TestSetting"];
             viewModel.TestFile = "<NOT FOUND>";
-            var fileInfo = hostingEnv.ContentRootFileProvider.GetFileInfo(config["TestFileLocation"]);
+            viewModel.TestFileLocation = config["TestFileLocation"];
 
-            if (fileInfo.Exists)
+            if (System.IO.File.Exists(viewModel.TestFileLocation))
             {
-                using (var s = fileInfo.CreateReadStream())
-                using (var t = new StreamReader(s))
-                {
-                    var contents = await t.ReadToEndAsync();
-                    viewModel.TestFile = contents;
-                }
+                viewModel.TestFile = System.IO.File.ReadAllText(viewModel.TestFileLocation);
             }
 
             viewModel.WebApiGetUri = config["TestGetUri"];

@@ -8,5 +8,5 @@ Todo:
 To run as docker
 ```
 $ docker build -t samplewebapp .
-$ docker run -d -p 8080:80 -e TestSetting=FromDocker --name myapp samplewebapp
+$ docker run -d -p 8080:80 -e TestSetting=FromDocker TestFileLocation=/home/counter.txt --name myapp samplewebapp
 ```
