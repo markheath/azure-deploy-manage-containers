@@ -7,6 +7,6 @@ Todo:
 
 To run as docker
 ```
-$ docker build -t aspnetdocker .
-$ docker run -d -p 8080:80 -e TestSetting=FromDocker --name myapp aspnetdocker
+$ docker build -t SampleWebApp .
+$ docker run -d -p 8080:80 -e TestSetting=FromDocker --name myapp SampleWebApp
 ```

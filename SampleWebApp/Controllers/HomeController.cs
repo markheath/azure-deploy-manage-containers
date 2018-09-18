@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace aspnetdocker.Controllers
+namespace SampleWebApp.Controllers
 {
     public class HomeController : Controller
     {

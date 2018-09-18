@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace aspnetdocker.Controllers
+namespace SampleWebApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
