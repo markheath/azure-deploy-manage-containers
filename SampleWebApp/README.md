@@ -3,7 +3,6 @@ Simple ASP.NET Core app deployable as docker container with some diagnostic info
 Todo:
 [ ] Write to file
 [ ] POST to web API
-[ ] Layout (use bootstrap and libman)
 
 To run as docker
 ```
