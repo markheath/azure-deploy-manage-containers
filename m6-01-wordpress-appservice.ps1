@@ -67,8 +67,25 @@ Start-Process https://$site
 # to apply the container settings afterwards (not sure if necessary)
 az webapp config container set -g $resourceGroup -n $appName -i $dockerRepo
 
+### PART 2 ###
+
 # scale up app service
 az appservice plan update -n $planName -g $resourceGroup --number-of-workers 3
+
+# create a staging slot (cloning from production slot's settings)
+az webapp deployment slot create -g $resourceGroup -n $appName -s staging --configuration-source $appName
+
+# enable CD for the staging slot
+az webapp deployment container config -g $resourceGroup -n $appName -s staging --enable-cd true
+
+# get the webhook
+az webapp deployment container show-cd-url -n $appName -g $resourceGroup
+
+# to configure the webhook on an ACR registry
+az acr webhook create --registry mycontainerregistry --name myacrwebhook01 --actions push --uri http://webhookuri.com
+
+# perform a slot swap
+az webapp deployment slot swap -g $resourceGroup -n $appName --slot staging --target-slot production
 
 # clean up
 az group delete --name $resourceGroup --yes --no-wait
