@@ -5,19 +5,23 @@ $resourceGroup = "AciPrivateRegistryDemo"
 $location = "westeurope"
 az group create -n $resourceGroup -l $location
 
-# create an Azure Container Registry
-$acrName = "mheathacr"
-az acr create -g $resourceGroup -n $acrName `
-    --sku Basic --admin-enabled true
+# ACR we'll be using
+$acrName = "pluralsightacr"
+
+# if we've not already created an Azure Container Registry
+# az acr create -g $resourceGroup -n $acrName --sku Basic --admin-enabled true
 
 # login to the registry with docker
 $acrPassword = az acr credential show -n $acrName `
     --query "passwords[0].value" -o tsv
 $loginServer = az acr show -n $acrName `
     --query loginServer --output tsv
-# docker login -u $acrName -p $acrPassword $loginServer
+
+# log in to the ACR
 az acr login -n $acrName
 
+# if we want to use docker login instead:
+# docker login -u $acrName -p $acrPassword $loginServer
 
 $storageAccountName = "acishare$(Get-Random `
     -Minimum 1000 -Maximum 10000)"
