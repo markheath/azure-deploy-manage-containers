@@ -15,7 +15,8 @@ $acrPassword = az acr credential show -n $acrName `
     --query "passwords[0].value" -o tsv
 $loginServer = az acr show -n $acrName `
     --query loginServer --output tsv
-docker login -u $acrName -p $acrPassword $loginServer
+# docker login -u $acrName -p $acrPassword $loginServer
+az acr login -n $acrName
 
 
 $storageAccountName = "acishare$(Get-Random `
@@ -66,7 +67,7 @@ az container create -g $resourceGroup `
     --azure-file-volume-account-key $storageKey `
     --azure-file-volume-share-name $shareName `
     --azure-file-volume-mount-path "/home" `
-    -e TestSetting=FromAzCli TestFileLocation=/home/counter.txt `
+    -e TestSetting=FromAzCli2 TestFileLocation=/home/message.txt `
     --dns-name-label "aciacr" --ports 80
 
 
@@ -78,15 +79,19 @@ Start-Process "http://$($fqdn)"
 # view the logs for our container
 az container logs -n $containerGroupName -g $resourceGroup
 
+az container exec -n $containerGroupName -g $resourceGroup --exec-command sh
+
+# within the container:
+echo "hello" > /home/message.txt
+exit
 
 az storage file list -s $shareName -o table
 
-$downloadThumbnailPath = "C:\Users\mheath\Downloads\counter.txt"
-az storage file download -s $shareName -p "counter.txt" `
-    --dest $downloadThumbnailPath
-Start-Process $downloadThumbnailPath
+$downloadPath = "C:\Users\mheath\Downloads\message.txt"
+az storage file download -s $shareName -p "message.txt" `
+    --dest $downloadPath
+Start-Process $downloadPath
 
-az container exec -n $containerGroupName -g $resourceGroup --exec-command sh
 
 az container delete -g $resourceGroup -n $containerGroupName
 
