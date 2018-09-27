@@ -16,28 +16,33 @@ $resGroup = "ServiceFabricMeshTest"
 az group create -n $resGroup -l "westeurope"
 
 # deploy the mesh application
-az mesh deployment create -g $resGroup --template-file .\arm-template.json
+$templateFile = ".\m7-sfmesh-windows.json"
+az mesh deployment create -g $resGroup --template-file $templateFile
 
 # get public ip address
 $publicIp = az mesh network show -g $resGroup  --name todolistappNetwork --query "ingressConfig.publicIpAddress" -o tsv
 
 # let's see if it's working
-iwr http://$publicIp:20001
+iwr http://$publicIp
 
 # get status of application
-az mesh app show -g $resGroup --name todolistapp
+$appName = "todolistapp"
+az mesh app show -g $resGroup --name $appName
 
 # view logs for front-end container
-az mesh code-package-log get -g $resGroup --application-name todolistapp --service-name WebFrontEnd --replica-name 0 --code-package-name WebFrontEnd
+az mesh code-package-log get -g $resGroup --application-name $appName --service-name WebFrontEnd --replica-name 0 --code-package-name WebFrontEnd
 
 # see number of front end instances
-az mesh service show -g $resGroup --name WebFrontEnd --app-name todolistapp --query "replicaCount"
+az mesh service show -g $resGroup --name WebFrontEnd --app-name $appName --query "replicaCount"
 
 # scale up with a fresh deployment
-az mesh deployment create -g $resGroup --template-file .\arm-template.json --parameters .\m7-scale-front-end-params.json
+az mesh deployment create -g $resGroup --template-file $templateFile --parameters .\m7-scale-front-end-params.json
 
 # see number of front end instances
-az mesh service show -g $resGroup --name WebFrontEnd --app-name todolistapp --query "replicaCount"
+az mesh service show -g $resGroup --name WebFrontEnd --app-name $appName --query "replicaCount"
+
+# see summary of services
+az mesh service list -g $resGroup --app-name $appName -o table
 
 # delete everything
 az group delete -n $resGroup -y

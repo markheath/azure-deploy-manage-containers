@@ -176,7 +176,7 @@
           "layer4": [
             {
               "name": "WebFrontEndIngress",
-              "publicPort": "20001",
+              "publicPort": "80",
               "applicationName": "todolistapp",
               "serviceName": "WebFrontEnd",
               "endpointName": "WebFrontEndListener"
