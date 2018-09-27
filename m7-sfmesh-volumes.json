@@ -1,0 +1,233 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "defaultValue": "westeurope",
+      "type": "String",
+      "metadata": {
+        "description": "Location of the resources."
+      }
+    },
+    "frontEndImage": {
+        "defaultValue": "markheath/samplewebapp:win1709",
+        "type": "string",
+        "metadata": {
+            "description": "The container image for the front end web service.  For example: '<myregistry>.azurecr.io/seabreeze/azure-mesh-todo-webfrontend:1.0-nanoserver-1709'"
+        }
+    },
+    "serviceImage": {
+        "defaultValue": "markheath/samplebackend:win1709",
+        "type": "string",
+        "metadata": {
+            "description": "The container image for the back end service.  For example: '<myregistry>.azurecr.io/seabreeze/azure-mesh-todo-service:1.0-nanoserver-1709'"
+        }
+    },
+    "frontEndCpu": {
+      "defaultValue": "0.5",
+      "type": "string",
+      "metadata": {
+          "description": "The CPU resources for the front end web service."
+      }
+    },
+    "serviceCpu": {
+      "defaultValue": "0.5",
+      "type": "string",
+      "metadata": {
+          "description": "The CPU resources for the back end service."
+      }
+    },
+    "frontEndMemory":{
+      "defaultValue": "1.0",
+      "type": "string",
+      "metadata": {
+          "description": "The memory in GB for the front end web service."
+      }
+    },
+    "serviceMemory":{
+      "defaultValue": "1.0",
+      "type": "string",
+      "metadata": {
+          "description": "The memory in GB for the back end service."
+      }
+    },
+    "frontEndReplicaCount":{
+      "defaultValue": "1",
+      "type": "string",
+      "metadata": {
+          "description": "The number of service replicas for the front end web service."
+      }
+    },
+    "serviceReplicaCount":{
+      "defaultValue": "1",
+      "type": "string",
+      "metadata": {
+          "description": "The number of service replicas for the back end service."
+      }
+    },
+    "fileShareName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Azure Files file share that provides the volume for the container."
+      }
+    },
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Azure storage account that contains the file share."
+      }
+    },
+    "storageAccountKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Access key for the Azure storage account that contains the file share."
+      }
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-07-01-preview",
+      "name": "todolistapp",
+      "type": "Microsoft.ServiceFabricMesh/applications",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "Microsoft.ServiceFabricMesh/networks/todolistappNetwork",
+        "Microsoft.ServiceFabricMesh/volumes/counterVolumeWindows"
+      ],
+      "properties": {
+        "services": [
+          {
+            "name": "WebFrontEnd",
+            "properties": {
+              "description": "WebFrontEnd description.",
+              "osType": "Windows",
+              "codePackages": [
+                {
+                  "name": "WebFrontEnd",
+                  "image": "[parameters('frontEndImage')]",
+                  "volumeRefs": [
+                    {
+                      "name": "[resourceId('Microsoft.ServiceFabricMesh/volumes', 'counterVolumeWindows')]",
+                      "destinationPath": "C:\\app\\data"
+                    }],
+                  "endpoints": [
+                    {
+                      "name": "WebFrontEndListener",
+                      "port": 20001
+                    }
+                  ],
+                  "environmentVariables": [
+                    {
+                      "name": "TestSetting",
+                      "value": "Set in ARM Template"
+                    },
+                    {
+                      "name": "TestGetUri",
+                      "value": "http://ToDoService:20002/api/values"
+                    },
+                    {
+                      "name":"TestFileLocation",
+                      "value":"C:\\app\\data\\message.txt"
+                    },
+                    {
+                      "name": "ASPNETCORE_URLS",
+                      "value": "http://+:20001"
+                    }
+                  ],
+                  "resources": {
+                    "requests": {
+                      "cpu": "[parameters('frontEndCpu')]",
+                      "memoryInGB": "[parameters('frontEndMemory')]"
+                    }
+                  }
+                }
+              ],
+              "replicaCount": "[parameters('frontEndReplicaCount')]",
+              "networkRefs": [
+                {
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'todolistappNetwork')]"
+                }
+              ]
+            }
+          },
+          {
+            "name": "ToDoService",
+            "properties": {
+              "description": "ToDoService description.",
+              "osType": "Windows",
+              "codePackages": [
+                {
+                  "name": "ToDoService",
+                  "image": "[parameters('serviceImage')]",
+                  "endpoints": [
+                    {
+                      "name": "ToDoServiceListener",
+                      "port": 20002
+                    }
+                  ],
+                  "environmentVariables": [
+                    {
+                      "name": "ASPNETCORE_URLS",
+                      "value": "http://+:20002"
+                    }
+                  ],
+                  "resources": {
+                    "requests": {
+                      "cpu": "[parameters('serviceCpu')]",
+                      "memoryInGB": "[parameters('serviceMemory')]"
+                    }
+                  }
+                }
+              ],
+              "replicaCount": "[parameters('serviceReplicaCount')]",
+              "networkRefs": [
+                {
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'todolistappNetwork')]"
+                }
+              ]
+            }
+          }
+        ],
+        "description": "todolistapp description."
+      }
+    },
+    {
+      "apiVersion": "2018-07-01-preview",
+      "name": "todolistappNetwork",
+      "type": "Microsoft.ServiceFabricMesh/networks",
+      "location": "[parameters('location')]",
+      "dependsOn": [],
+      "properties": {
+        "description": "todolistappNetwork description.",
+        "addressPrefix": "10.0.0.4/22",
+        "ingressConfig": {
+          "layer4": [
+            {
+              "name": "WebFrontEndIngress",
+              "publicPort": "80",
+              "applicationName": "todolistapp",
+              "serviceName": "WebFrontEnd",
+              "endpointName": "WebFrontEndListener"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "apiVersion": "2018-07-01-preview",
+      "name": "counterVolumeWindows",
+      "type": "Microsoft.ServiceFabricMesh/volumes",
+      "location": "[parameters('location')]",
+      "dependsOn": [],
+      "properties": {
+        "description": "Azure Files storage volume for counter App.",
+        "provider": "SFAzureFile",
+        "azureFileParameters": {
+          "shareName": "[parameters('fileShareName')]",
+          "accountName": "[parameters('storageAccountName')]",
+          "accountKey": "[parameters('storageAccountKey')]"
+        }
+      }
+    }
+  ]
+}
