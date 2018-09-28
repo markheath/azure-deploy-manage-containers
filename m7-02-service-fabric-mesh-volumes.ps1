@@ -51,20 +51,26 @@ az mesh deployment create -g $resGroup --template-file $templateFile `
  --parameters "{'fileShareName':{'value':'$shareName'},'storageAccountName':{'value':'$storageAccountName'},'storageAccountKey':{'value':'$storageKey'}}"
 
 # get public ip address
-$publicIp = az mesh network show -g $resGroup  --name todolistappNetwork --query "ingressConfig.publicIpAddress" -o tsv
+$publicIp = az mesh network show -g $resGroup  --name sampleAppNetwork --query "ingressConfig.publicIpAddress" -o tsv
 
 # let's see if it's working
-iwr http://$publicIp
+start http://$publicIp
 
 # get status of application
-$appName = "todolistapp"
+$appName = "sampleapp"
 az mesh app show -g $resGroup --name $appName
 
 # view logs for front-end container
-az mesh code-package-log get -g $resGroup --application-name $appName --service-name WebFrontEnd --replica-name 0 --code-package-name WebFrontEnd
+$frontendServiceName = "frontend"
+$frontendCodePackageName = "frontend"
+az mesh code-package-log get -g $resGroup --application-name $appName --service-name $frontendServiceName --replica-name 0 --code-package-name $frontendCodePackageName
 
 # see summary of services
 az mesh service list -g $resGroup --app-name $appName -o table
+
+# scale up the front end
+az mesh deployment create -g $resGroup --template-file $templateFile `
+ --parameters "{'fileShareName':{'value':'$shareName'},'storageAccountName':{'value':'$storageAccountName'},'storageAccountKey':{'value':'$storageKey'},'frontEndReplicaCount':{'value':'3'}}"
 
 # delete everything
 az group delete -n $resGroup -y
