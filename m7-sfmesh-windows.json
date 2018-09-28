@@ -13,14 +13,14 @@
         "defaultValue": "markheath/samplewebapp:win1709",
         "type": "string",
         "metadata": {
-            "description": "The container image for the front end web service.  For example: '<myregistry>.azurecr.io/seabreeze/azure-mesh-todo-webfrontend:1.0-nanoserver-1709'"
+            "description": "Front-end image"
         }
     },
     "serviceImage": {
         "defaultValue": "markheath/samplebackend:win1709",
         "type": "string",
         "metadata": {
-            "description": "The container image for the back end service.  For example: '<myregistry>.azurecr.io/seabreeze/azure-mesh-todo-service:1.0-nanoserver-1709'"
+            "description": "Back end image"
         }
     },
     "frontEndCpu": {
@@ -69,26 +69,26 @@
   "resources": [
     {
       "apiVersion": "2018-07-01-preview",
-      "name": "todolistapp",
+      "name": "sampleapp",
       "type": "Microsoft.ServiceFabricMesh/applications",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "Microsoft.ServiceFabricMesh/networks/todolistappNetwork"
+        "Microsoft.ServiceFabricMesh/networks/sampleappNetwork"
       ],
       "properties": {
         "services": [
           {
-            "name": "WebFrontEnd",
+            "name": "frontend",
             "properties": {
-              "description": "WebFrontEnd description.",
+              "description": "Front end service",
               "osType": "Windows",
               "codePackages": [
                 {
-                  "name": "WebFrontEnd",
+                  "name": "frontend",
                   "image": "[parameters('frontEndImage')]",
                   "endpoints": [
                     {
-                      "name": "WebFrontEndListener",
+                      "name": "frontendListener",
                       "port": 20001
                     }
                   ],
@@ -99,7 +99,7 @@
                     },
                     {
                       "name": "TestGetUri",
-                      "value": "http://ToDoService:20002/api/values"
+                      "value": "http://backend:20002/api/values"
                     },
                     {
                       "name": "ASPNETCORE_URLS",
@@ -117,23 +117,23 @@
               "replicaCount": "[parameters('frontEndReplicaCount')]",
               "networkRefs": [
                 {
-                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'todolistappNetwork')]"
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'sampleappNetwork')]"
                 }
               ]
             }
           },
           {
-            "name": "ToDoService",
+            "name": "backend",
             "properties": {
-              "description": "ToDoService description.",
+              "description": "Backend service.",
               "osType": "Windows",
               "codePackages": [
                 {
-                  "name": "ToDoService",
+                  "name": "backend",
                   "image": "[parameters('serviceImage')]",
                   "endpoints": [
                     {
-                      "name": "ToDoServiceListener",
+                      "name": "backendListener",
                       "port": 20002
                     }
                   ],
@@ -154,32 +154,32 @@
               "replicaCount": "[parameters('serviceReplicaCount')]",
               "networkRefs": [
                 {
-                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'todolistappNetwork')]"
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'sampleappNetwork')]"
                 }
               ]
             }
           }
         ],
-        "description": "todolistapp description."
+        "description": "Sample app on service fabric mesh."
       }
     },
     {
       "apiVersion": "2018-07-01-preview",
-      "name": "todolistappNetwork",
+      "name": "sampleappNetwork",
       "type": "Microsoft.ServiceFabricMesh/networks",
       "location": "[parameters('location')]",
       "dependsOn": [],
       "properties": {
-        "description": "todolistappNetwork description.",
+        "description": "Sample app Network",
         "addressPrefix": "10.0.0.4/22",
         "ingressConfig": {
           "layer4": [
             {
-              "name": "WebFrontEndIngress",
+              "name": "frontendIngress",
               "publicPort": "80",
-              "applicationName": "todolistapp",
-              "serviceName": "WebFrontEnd",
-              "endpointName": "WebFrontEndListener"
+              "applicationName": "sampleapp",
+              "serviceName": "frontend",
+              "endpointName": "frontendListener"
             }
           ]
         }

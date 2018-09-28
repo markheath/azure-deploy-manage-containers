@@ -20,26 +20,29 @@ $templateFile = ".\m7-sfmesh-windows.json"
 az mesh deployment create -g $resGroup --template-file $templateFile
 
 # get public ip address
-$publicIp = az mesh network show -g $resGroup  --name todolistappNetwork --query "ingressConfig.publicIpAddress" -o tsv
+$networkName = "sampleappNetwork"
+$publicIp = az mesh network show -g $resGroup  --name $networkName --query "ingressConfig.publicIpAddress" -o tsv
 
 # let's see if it's working
-iwr http://$publicIp
+start http://$publicIp
 
 # get status of application
-$appName = "todolistapp"
+$appName = "sampleapp"
 az mesh app show -g $resGroup --name $appName
 
 # view logs for front-end container
-az mesh code-package-log get -g $resGroup --application-name $appName --service-name WebFrontEnd --replica-name 0 --code-package-name WebFrontEnd
+$frontEndServiceName = "frontend"
+$frontEndCodePackageName = "frontend"
+az mesh code-package-log get -g $resGroup --application-name $appName --service-name $frontEndServiceName --replica-name 0 --code-package-name $frontEndCodePackageName
 
 # see number of front end instances
-az mesh service show -g $resGroup --name WebFrontEnd --app-name $appName --query "replicaCount"
+az mesh service show -g $resGroup --name $frontEndServiceName --app-name $appName --query "replicaCount"
 
 # scale up with a fresh deployment
 az mesh deployment create -g $resGroup --template-file $templateFile --parameters .\m7-scale-front-end-params.json
 
 # see number of front end instances
-az mesh service show -g $resGroup --name WebFrontEnd --app-name $appName --query "replicaCount"
+az mesh service show -g $resGroup --name $frontEndServiceName --app-name $appName --query "replicaCount"
 
 # see summary of services
 az mesh service list -g $resGroup --app-name $appName -o table
