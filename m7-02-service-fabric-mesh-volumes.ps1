@@ -68,9 +68,9 @@ az mesh code-package-log get -g $resGroup --application-name $appName --service-
 # see summary of services
 az mesh service list -g $resGroup --app-name $appName -o table
 
-# scale up the front end
+# scale up the back end
 az mesh deployment create -g $resGroup --template-file $templateFile `
- --parameters "{'fileShareName':{'value':'$shareName'},'storageAccountName':{'value':'$storageAccountName'},'storageAccountKey':{'value':'$storageKey'},'frontEndReplicaCount':{'value':'3'}}"
+ --parameters "{'fileShareName':{'value':'$shareName'},'storageAccountName':{'value':'$storageAccountName'},'storageAccountKey':{'value':'$storageKey'},'serviceReplicaCount':{'value':'3'}}"
 
 # delete everything
 az group delete -n $resGroup -y
