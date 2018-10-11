@@ -1,3 +1,5 @@
+# first follow instructions at https://docs.docker.com/install/ to install docker
+
 # run a new redis container
 docker run -d -p 6379:6379 --name redis1 redis
 
