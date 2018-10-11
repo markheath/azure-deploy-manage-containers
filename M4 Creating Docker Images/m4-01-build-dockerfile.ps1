@@ -1,5 +1,8 @@
+# before we start, we should have built the sample web app with
+dotnet publish -c Release -o out
+
 # build a docker image from the dockerfile
-docker build -t samplewebapp .
+docker build -t samplewebapp -f basic.Dockerfile .
 
 # see the images we have
 docker image ls 
