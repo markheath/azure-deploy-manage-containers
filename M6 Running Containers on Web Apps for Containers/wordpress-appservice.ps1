@@ -3,7 +3,7 @@
 # get logged in to the azure cli
 az login
 az account show --query name -o tsv
-az account set -s "MVP"
+az account set -s "MySubscription"
 
 # create a resource group in our preferred location to use
 $resourceGroup = "wordpressappservice"
