@@ -20,7 +20,8 @@ $networkName = "votingNetwork"
 $publicIp = az mesh network show -g $resGroup --name $networkName --query "ingressConfig.publicIpAddress" -o tsv
 
 # let's see if it's working
-iwr http://$publicIp
+Start-Process http://$publicIp:8081 # voting
+Start-Process http://$publicIp:8082 # results
 
 # get status of application
 $appName = "votingApp"
@@ -37,6 +38,17 @@ az mesh service show -g $resGroup --app-name $appName --name result
 
 # look at network
 az mesh network show -n votingNetwork -g $resGroup
+
+# scale up vote container to 3 instances (currently seems unreliable)
+# https://github.com/Azure/service-fabric-mesh-preview/issues/266
+az mesh deployment create -g $resGroup -n "scaleto3" --template-file $templateFile `
+ --parameters "{'voteReplicaCount':{'value':'3'}}"
+
+# see services again
+az mesh service list -g $resGroup --app-name $appName -o table
+
+# explore the vote service
+az mesh service show -g $resGroup --app-name $appName --name vote
 
 # delete everything
 az group delete -n $resGroup -y
