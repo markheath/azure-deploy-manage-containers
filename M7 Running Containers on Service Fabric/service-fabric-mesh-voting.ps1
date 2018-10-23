@@ -48,7 +48,13 @@ az mesh deployment create -g $resGroup -n "scaleto3" --template-file $templateFi
 az mesh service list -g $resGroup --app-name $appName -o table
 
 # explore the vote service
-az mesh service show -g $resGroup --app-name $appName --name vote
+az mesh service show -g $resGroup --app-name $appName --name vote -o table
+
+# see the replicas
+az mesh service-replica list -g $resGroup --app-name $appName --service-name vote -o table
+
+# explore a particular replica
+az mesh service-replica show -g $resGroup --app-name $appName --service-name vote --replica-name 0
 
 # delete everything
 az group delete -n $resGroup -y
