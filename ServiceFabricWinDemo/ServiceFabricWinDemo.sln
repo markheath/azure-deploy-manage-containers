@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{A07B5EB6-E848-4116-A8D0-A826331D98C6}") = "ServiceFabricWinDemo", "ServiceFabricWinDemo\ServiceFabricWinDemo.sfproj", "{CC27CB67-3A62-475C-8AE6-F87B813E3CAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CC27CB67-3A62-475C-8AE6-F87B813E3CAE}.Debug|x64.ActiveCfg = Debug|x64
+		{CC27CB67-3A62-475C-8AE6-F87B813E3CAE}.Debug|x64.Build.0 = Debug|x64
+		{CC27CB67-3A62-475C-8AE6-F87B813E3CAE}.Debug|x64.Deploy.0 = Debug|x64
+		{CC27CB67-3A62-475C-8AE6-F87B813E3CAE}.Release|x64.ActiveCfg = Release|x64
+		{CC27CB67-3A62-475C-8AE6-F87B813E3CAE}.Release|x64.Build.0 = Release|x64
+		{CC27CB67-3A62-475C-8AE6-F87B813E3CAE}.Release|x64.Deploy.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AA9A2C59-2738-48CC-ABC2-1B8BC10D055F}
+	EndGlobalSection
+EndGlobal
