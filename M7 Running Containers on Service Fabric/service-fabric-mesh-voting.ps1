@@ -8,7 +8,7 @@ az extension add --name mesh
 az extension update --name mesh
 
 # create a resource group
-$resGroup = "ServiceFabricMeshTest"
+$resGroup = "ServiceFabricMeshVote"
 az group create -n $resGroup -l "westeurope"
 
 # deploy the mesh application
@@ -20,8 +20,8 @@ $networkName = "votingNetwork"
 $publicIp = az mesh network show -g $resGroup --name $networkName --query "ingressConfig.publicIpAddress" -o tsv
 
 # let's see if it's working
-Start-Process http://$publicIp:8081 # voting
-Start-Process http://$publicIp:8082 # results
+Start-Process http://$($publicIp):8081 # voting
+Start-Process http://$($publicIp):8082 # results
 
 # get status of application
 $appName = "votingApp"
