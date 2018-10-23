@@ -12,7 +12,8 @@
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
   <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="SampleBackendPkg" ServiceManifestVersion="1.0.1" />
+    <ServiceManifestRef ServiceManifestName="SampleBackendPkg" 
+                        ServiceManifestVersion="1.0.1" />
     <ConfigOverrides />
     <Policies>
       <ContainerHostPolicies CodePackageRef="Code">
@@ -23,7 +24,8 @@
     </Policies>
   </ServiceManifestImport>
   <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="SampleWebAppPkg" ServiceManifestVersion="1.0.6" />
+    <ServiceManifestRef ServiceManifestName="SampleWebAppPkg" 
+                        ServiceManifestVersion="1.0.1" />
     <ConfigOverrides />
     <Policies>
       <ContainerHostPolicies CodePackageRef="Code">
@@ -42,12 +44,14 @@
     <Service Name="SampleBackend" 
              ServiceDnsName="samplebackend"
              ServicePackageActivationMode="ExclusiveProcess">
-      <StatelessService ServiceTypeName="SampleBackendType" InstanceCount="[SampleBackend_InstanceCount]">
+      <StatelessService ServiceTypeName="SampleBackendType" 
+                        InstanceCount="[SampleBackend_InstanceCount]">
         <SingletonPartition />
       </StatelessService>
     </Service>
     <Service Name="SampleWebApp" ServicePackageActivationMode="ExclusiveProcess">
-      <StatelessService ServiceTypeName="SampleWebAppType" InstanceCount="[SampleWebApp_InstanceCount]">
+      <StatelessService ServiceTypeName="SampleWebAppType" 
+                        InstanceCount="[SampleWebApp_InstanceCount]">
         <SingletonPartition />
       </StatelessService>
     </Service>

@@ -23,11 +23,11 @@
    <!-- n.b. failed to deploy on trial "party" cluster, possibly
        because container built on wrong version of windows?-->
   <ClusterConnectionParameters 
-      ConnectionEndpoint="mark102032.westeurope.cloudapp.azure.com:19000" 
+      ConnectionEndpoint="mark102030.westeurope.cloudapp.azure.com:19000" 
       X509Credential="true" 
-      ServerCertThumbprint="55E08AB906D94A4AF597DE98387EA088143F42F6" 
+      ServerCertThumbprint="ecb072941800379dc3fba0319a70c88c99e4b9c3" 
       FindType="FindByThumbprint" 
-      FindValue="55E08AB906D94A4AF597DE98387EA088143F42F6" 
+      FindValue="ecb072941800379dc3fba0319a70c88c99e4b9c3" 
       StoreLocation="CurrentUser" StoreName="My" />
   <ApplicationParameterFile Path="..\ApplicationParameters\Cloud.xml" />
   <CopyPackageParameters CompressPackage="true" />

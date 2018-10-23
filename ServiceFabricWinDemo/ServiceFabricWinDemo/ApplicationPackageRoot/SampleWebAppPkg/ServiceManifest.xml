@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ServiceManifest Name="SampleWebAppPkg"
-                 Version="1.0.6"
+                 Version="1.0.1"
                  xmlns="http://schemas.microsoft.com/2011/01/fabric"
                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -22,8 +22,10 @@
     
     <EnvironmentVariables>
       
-      <EnvironmentVariable Name="TestSetting" Value="Hello from service manifest v6"/>
-      <EnvironmentVariable Name="TestGetUri" Value="http://samplebackend:8081/api/values"/>
+      <EnvironmentVariable Name="TestSetting" 
+                           Value="Hello from service manifest"/>
+      <EnvironmentVariable Name="TestGetUri" 
+                           Value="http://samplebackend:8081/api/values"/>
     </EnvironmentVariables>
     
   </CodePackage>
