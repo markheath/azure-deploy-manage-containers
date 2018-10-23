@@ -170,7 +170,7 @@
                   }
                 }
               ],
-              "replicaCount": "[parameters('workerReplicaCount')]",
+              "replicaCount": "1",
               "networkRefs": [
                 {
                   "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]"
