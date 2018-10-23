@@ -41,8 +41,8 @@ az mesh network show -n votingNetwork -g $resGroup
 
 # scale up vote container to 3 instances (currently seems unreliable)
 # https://github.com/Azure/service-fabric-mesh-preview/issues/266
-az mesh deployment create -g $resGroup -n "scaleto3" --template-file $templateFile `
- --parameters "{'voteReplicaCount':{'value':'3'}}"
+az mesh deployment create -g $resGroup --template-file $templateFile `
+ --parameters "{'workerReplicaCount':{'value':'3'}}"
 
 # see services again
 az mesh service list -g $resGroup --app-name $appName -o table
