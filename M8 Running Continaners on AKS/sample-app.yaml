@@ -15,6 +15,7 @@ spec:
       containers:
       - name: samplebackend
         image: markheath/samplebackend:linux
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         env:
@@ -49,6 +50,7 @@ spec:
       containers:
       - name: samplewebapp
         image: markheath/samplewebapp:linux
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         env:
@@ -61,6 +63,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: samplewebapp
+  labels:
+    apps: samplewebapp
 spec:
   type: LoadBalancer
   ports:
