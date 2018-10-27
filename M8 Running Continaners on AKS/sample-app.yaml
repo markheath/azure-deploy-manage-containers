@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samplebackend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samplebackend
+  template:
+    metadata:
+      labels:
+        app: samplebackend
+    spec:
+      containers:
+      - name: samplebackend
+        image: markheath/samplebackend:linux
+        ports:
+        - containerPort: 80
+        env:
+        - name: TestSetting
+          value: "hello from Kubernetes"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: samplebackend
+spec:
+  ports:
+  - port: 8081
+    targetPort: 80
+  selector:
+    app: samplebackend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samplewebapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samplewebapp
+  template:
+    metadata:
+      labels:
+        app: samplewebapp
+    spec:
+      containers:
+      - name: samplewebapp
+        image: markheath/samplewebapp:linux
+        ports:
+        - containerPort: 80
+        env:
+        - name: TestSetting
+          value: "hello from Kubernetes"
+        - name: TestGetUri
+          value: "http://samplebackend:8081/api/values"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: samplewebapp
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 80
+  selector:
+    app: samplewebapp
