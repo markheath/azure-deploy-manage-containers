@@ -17,19 +17,23 @@ az account set -s "MySub"
 # https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough
 # 
 # 1. Enable AKS Preview on this subscription
-az provider register -n Microsoft.ContainerService
+#az provider register -n Microsoft.ContainerService
 
 # 2. Create a resource group
 $resourceGroup = "AKSDemo"
 $location = "westeurope" # valid options are currently 'eastus,westeurope,centralus,canadacentral,canadaeast'
-az group create --name $resourceGroup --location $location
+az group create -n $resourceGroup -l $location
 
 # 3. Create our AKS Cluster (takes about 8 minutes)
 $clusterName = "MarkAks"
+# could also say --enable-addons monitoring
 az aks create -g $resourceGroup -n $clusterName --node-count 1 --generate-ssh-keys
 
 # 3b. to check it worked
 az aks show -g $resourceGroup -n $clusterName
+
+# check we have kubectl
+kubectl version --short
 
 # 4. install the kubectl CLI (needs to be done from Administrator prompt)
 # ends up putting it in on Windows C:\\Program Files (x86)\\kubectl.exe
