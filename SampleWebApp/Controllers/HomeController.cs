@@ -26,7 +26,7 @@ namespace SampleWebApp.Controllers
         {
             var viewModel = new IndexViewModel();
             viewModel.EnvironmentName = hostingEnv.EnvironmentName;
-            viewModel.HostName = System.Net.Dns.GetHostName();
+            viewModel.HostName = System.Environment.MachineName;
             viewModel.TestSetting = config["TestSetting"];
             viewModel.TestFile = "<NOT FOUND>";
             viewModel.TestFileLocation = config["TestFileLocation"];

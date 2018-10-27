@@ -14,7 +14,7 @@ namespace SampleBackend.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "hello", "from", "backend" };
+            return new string[] { "hello", "from", "backend", System.Environment.MachineName };
         }
 
         // GET api/values/5
