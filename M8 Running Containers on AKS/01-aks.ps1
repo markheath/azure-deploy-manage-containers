@@ -106,6 +106,12 @@ kubectl get pod
 # we can attach disks / Azure file shares
 # https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
 
+# deploy the example vote app
+kubectl apply -f .\example-vote.yml
+# change the vote deployment to 2 instances with eggs and bacon
+kubectl apply -f .\example-vote-v2.yml
+# delete
+kubectl delete -f .\example-vote-v2.yml
 
 # Clean up
 az group delete --name $resourceGroup --yes --no-wait

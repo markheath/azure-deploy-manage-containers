@@ -158,7 +158,7 @@ metadata:
   labels:
     app: vote
 spec:
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
@@ -171,6 +171,11 @@ spec:
             - 
               containerPort: 80
               name: vote
+          env:
+            - name: OPTION_A
+              value: "eggs"
+            - name: OPTION_B
+              value: "bacon"
 --- 
 apiVersion: v1
 kind: Service
