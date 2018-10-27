@@ -113,6 +113,12 @@ kubectl apply -f .\example-vote-v2.yml
 # delete
 kubectl delete -f .\example-vote-v2.yml
 
+# deploy a second instance to another namespace
+kubectl create namespace staging
+
+kubectl apply -f .\example-vote.yml -n staging
+kubectl get service -n staging
+
 # Clean up
 az group delete --name $resourceGroup --yes --no-wait
 
