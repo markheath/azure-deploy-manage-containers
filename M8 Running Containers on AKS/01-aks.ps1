@@ -70,47 +70,45 @@ kubectl get service samplewebapp --watch
 # samplewebapp   LoadBalancer   10.0.215.132   104.40.183.133   8080:30984/TCP   6m
 
 # 3. launch app in browser (use IP address from previous command)
-Start-Process http://52.232.105.209
+Start-Process http://52.232.105.209:8080
 
-# 4. run kubernetes dashboard
-az aks browse -g $resourceGroup -n $clusterName
+# 4. see the status of our pods
+kubectl get pod
 
+# 5. view logs from a pod
+# kubectl logs <<podname>>
 
-# BONUS
+# PART 3 - SCALING
 # we can scale the cluster
 az aks scale -g $resourceGroup -n $clusterName --node-count 3
 
-# let's have three replicas of our front end container
-kubectl scale --replicas=3 deployment/samplewebapp
-
-# check status
-kubectl get pod
-
-kubectl get deployment samplewebapp
-
-# we can upgrade our app
-# https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-app-update
-kubectl set image deployment samplewebapp samplewebapp=markheath/samplewebapp:v2
-
-kubectl get pod
-
-# we can get logs
-###kubectl logs <<podname>>
-
-# n.b. updating if not using :latest
-# https://stackoverflow.com/questions/33112789/how-do-i-force-kubernetes-to-re-pull-an-image
-
-# we can upgrade kubernetes
-# https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-upgrade-cluster
-
-# we can attach disks / Azure file shares
-# https://docs.microsoft.com/en-us/azure/aks/azure-files-dynamic-pv
+# see the nodes
+kubectl get nodes
 
 # deploy the example vote app
 kubectl apply -f .\example-vote.yml
-# change the vote deployment to 2 instances with eggs and bacon
+
+# watch for the public ip addresses of the vote and result services
+kubectl get service --watch
+
+# change the vote deployment to 3 replicas with eggs and bacon
 kubectl apply -f .\example-vote-v2.yml
-# delete
+
+# run kubernetes dashboard
+az aks browse -g $resourceGroup -n $clusterName
+
+# n.b. if the dashboard shows errors, you may need this fix:
+# https://pascalnaber.wordpress.com/2018/06/17/access-dashboard-on-aks-with-rbac-enabled/
+kubectl create clusterrolebinding kubernetes-dashboard -n kube-system --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
+
+### BONUS STEPS
+# how to directly scale to three replicas of our front end container
+kubectl scale --replicas=3 deployment/samplewebapp
+
+# how to upgrade a container directly
+kubectl set image deployment samplewebapp samplewebapp=markheath/samplewebapp:v2
+
+# delete an app deployed with kubectl apply
 kubectl delete -f .\example-vote-v2.yml
 
 # deploy a second instance to another namespace
@@ -119,6 +117,8 @@ kubectl create namespace staging
 kubectl apply -f .\example-vote.yml -n staging
 kubectl get service -n staging
 
+
+
 # Clean up
-az group delete --name $resourceGroup --yes --no-wait
+az group delete -n $resourceGroup --yes --no-wait
 
