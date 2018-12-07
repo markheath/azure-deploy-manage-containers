@@ -34,10 +34,9 @@ az aks show -g $resourceGroup -n $clusterName
 kubectl version --short
 
 # if not install the kubectl CLI (needs to be done from Administrator prompt)
-# ends up putting it in on Windows C:\\Program Files (x86)\\kubectl.exe
 ### az aks install-cli
-# we'll work round this by storing path to kubectl in a variable
-### $env:Path = $env:Path + ";C:\Program Files (x86)"
+# update path to be able to find kubectl:
+### $env:path += ';C:\Users\mheath\.azure-kubectl'
 
 # 5. Get credentials and set up for kubectl to use
 az aks get-credentials -g $resourceGroup -n $clusterName
