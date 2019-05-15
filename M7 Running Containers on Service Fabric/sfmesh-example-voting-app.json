@@ -26,7 +26,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2018-07-01-preview",
+      "apiVersion": "2018-09-01-preview",
       "name": "votingApp",
       "type": "Microsoft.ServiceFabricMesh/applications",
       "location": "[resourceGroup().location]",
@@ -64,7 +64,10 @@
               "replicaCount": "[parameters('voteReplicaCount')]",
               "networkRefs": [
                 {
-                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]"
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]",
+                  "endpointRefs": [
+                    { "name": "VoteListener" }
+                  ]
                 }
               ]
             }
@@ -105,7 +108,10 @@
               "replicaCount": "[parameters('resultReplicaCount')]",
               "networkRefs": [
                 {
-                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]"
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]",
+                  "endpointRefs": [
+                    { "name": "ResultListener" }
+                  ]
                 }
               ]
             }
@@ -173,7 +179,10 @@
               "replicaCount": "1",
               "networkRefs": [
                 {
-                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]"
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]",
+                  "endpointRefs": [
+                    { "name": "MessageQueueListener" }
+                  ]
                 }
               ]
             }
@@ -207,7 +216,10 @@
               "replicaCount": "1",
               "networkRefs": [
                 {
-                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]"
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]",
+                  "endpointRefs": [
+                    { "name": "DbListener" }
+                  ]
                 }
               ]
             }
@@ -217,32 +229,53 @@
       }
     },
     {
-      "apiVersion": "2018-07-01-preview",
+      "apiVersion": "2018-09-01-preview",
       "name": "votingNetwork",
       "type": "Microsoft.ServiceFabricMesh/networks",
       "location": "[resourceGroup().location]",
       "dependsOn": [],
       "properties": {
+        "kind": "Local",
         "description": "votingNetwork description.",
-        "addressPrefix": "10.0.0.4/22",
-        "ingressConfig": {
-          "layer4": [
-            {
-              "name": "VoteIngress",
-              "publicPort": "8081",
+        "networkAddressPrefix": "10.0.0.0/24"
+      }
+    },
+    {
+      "apiVersion": "2018-09-01-preview",
+      "name": "votingGateway",
+      "type": "Microsoft.ServiceFabricMesh/gateways",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "Microsoft.ServiceFabricMesh/networks/votingNetwork"
+      ],
+      "properties": {
+        "description": "Service Fabric Mesh Gateway for Voting sample.",
+        "sourceNetwork": {
+          "name": "Open"
+        },
+        "destinationNetwork": {
+          "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'votingNetwork')]"
+        },
+        "tcp": [
+          {
+            "name": "voteIngress",
+            "port": 8081,
+            "destination": {
               "applicationName": "votingApp",
               "serviceName": "vote",
               "endpointName": "VoteListener"
-            },
-            {
-              "name": "ResultIngress",
-              "publicPort": "8082",
+            }
+          },
+          {
+            "name": "resultIngress",
+            "port": 8082,
+            "destination": {
               "applicationName": "votingApp",
               "serviceName": "result",
               "endpointName": "ResultListener"
             }
-          ]
-        }
+          }
+        ]
       }
     }
   ]

@@ -16,8 +16,8 @@ $templateFile = ".\sfmesh-example-voting-app.json"
 az mesh deployment create -g $resGroup --template-file $templateFile
 # [System.Console]::ResetColor()
 # get public ip address
-$networkName = "votingNetwork"
-$publicIp = az mesh network show -g $resGroup --name $networkName --query "ingressConfig.publicIpAddress" -o tsv
+$gatewayName = "votingGateway"
+$publicIp = az mesh gateway show -g $resGroup --name $gatewayName --query "ipAddress" -o tsv
 
 # let's see if it's working
 Start-Process http://$($publicIp):8081 # voting
