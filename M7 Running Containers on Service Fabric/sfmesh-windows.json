@@ -68,7 +68,7 @@
   },
   "resources": [
     {
-      "apiVersion": "2018-07-01-preview",
+      "apiVersion": "2018-09-01-preview",
       "name": "sampleapp",
       "type": "Microsoft.ServiceFabricMesh/applications",
       "location": "[parameters('location')]",
@@ -117,7 +117,12 @@
               "replicaCount": "[parameters('frontEndReplicaCount')]",
               "networkRefs": [
                 {
-                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'sampleappNetwork')]"
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'sampleappNetwork')]",
+                  "endpointRefs" : [
+                    {
+                      "name": "frontendListener"
+                    }
+                  ]
                 }
               ]
             }
@@ -154,7 +159,10 @@
               "replicaCount": "[parameters('serviceReplicaCount')]",
               "networkRefs": [
                 {
-                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'sampleappNetwork')]"
+                  "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'sampleappNetwork')]",
+                  "endpointRefs": [
+                    { "name": "backendListener" }
+                  ]
                 }
               ]
             }
@@ -164,25 +172,44 @@
       }
     },
     {
-      "apiVersion": "2018-07-01-preview",
+      "apiVersion": "2018-09-01-preview",
       "name": "sampleappNetwork",
       "type": "Microsoft.ServiceFabricMesh/networks",
       "location": "[parameters('location')]",
       "dependsOn": [],
       "properties": {
+        "kind": "Local",
         "description": "Sample app Network",
-        "addressPrefix": "10.0.0.4/22",
-        "ingressConfig": {
-          "layer4": [
-            {
-              "name": "frontendIngress",
-              "publicPort": "80",
+        "networkAddressPrefix": "10.0.0.0/24"
+      }
+    },
+    {
+      "apiVersion": "2018-09-01-preview",
+      "name": "sampleappGateway",
+      "type": "Microsoft.ServiceFabricMesh/gateways",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "Microsoft.ServiceFabricMesh/networks/sampleappNetwork"
+      ],
+      "properties": {
+        "description": "Sample app Gateway",
+        "sourceNetwork": {
+          "name": "Open"
+        },
+        "destinationNetwork": {
+          "name": "[resourceId('Microsoft.ServiceFabricMesh/networks', 'sampleappNetwork')]"
+        },
+        "tcp": [
+          {
+            "name": "web",
+            "port": 80,
+            "destination": {
               "applicationName": "sampleapp",
               "serviceName": "frontend",
               "endpointName": "frontendListener"
             }
-          ]
-        }
+          }
+        ]
       }
     }
   ]

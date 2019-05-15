@@ -26,8 +26,8 @@ az mesh deployment create -g $resGroup --template-file $templateFile
 #> az mesh app show --resource-group ServiceFabricMeshTest --name sampleapp
 
 # get public ip address
-$networkName = "sampleappNetwork"
-$publicIp = az mesh network show -g $resGroup --name $networkName --query "ingressConfig.publicIpAddress" -o tsv
+$gatewayName = "sampleappGateway"
+$publicIp = az mesh gateway show -g $resGroup --name $gatewayName --query "ipAddress" -o tsv
 
 # let's see if it's working
 Start-Process http://$publicIp
