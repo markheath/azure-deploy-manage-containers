@@ -32,7 +32,7 @@ az mysql server create -g $resourceGroup -n $mysqlServerName `
             --admin-user $adminUser --admin-password $adminPassword `
             -l $location `
             --ssl-enforcement Disabled `
-            --sku-name GP_Gen4_2 --version 5.7
+            --sku-name GP_Gen5_2 --version 5.7
 
 # open the firewall (use 0.0.0.0 to allow all Azure traffic for now)
 az mysql server firewall-rule create -g $resourceGroup `
