@@ -8,7 +8,7 @@ docker build -t samplewebapp -f basic.Dockerfile .
 docker image ls 
 
 # run the image
-docker run -d -p 8080:80 samplewebapp –name myapp
+docker run -d -p 8080:80 --name myapp samplewebapp
 
 # test it is working:
 http://localhost:8080

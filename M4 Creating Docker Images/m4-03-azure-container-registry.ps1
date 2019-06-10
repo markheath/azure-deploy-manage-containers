@@ -27,7 +27,7 @@ docker image ls
 docker tag samplewebapp:v2 $loginServer/samplewebapp:v2
 
 # push the image to our Azure Container Registry
-docker push $loginServer/myaspnetcoreapp:v2
+docker push $loginServer/samplewebapp:v2
 
 # view the images in our ACR
 az acr repository list -n $registryName -o table
@@ -35,7 +35,7 @@ az acr repository list -n $registryName -o table
 # view the tags for the samplewebapp repository
 az acr repository show-tags -n $registryName --repository samplewebapp -o table
 
-# delete a repository from the 
+# delete a repository from the container registry
 az acr repository delete -n $registryName -t samplewebapp:v2
 
 # to delete everything we made in this demo
