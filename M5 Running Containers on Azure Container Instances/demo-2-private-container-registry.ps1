@@ -91,7 +91,7 @@ exit
 
 az storage file list -s $shareName -o table
 
-$downloadPath = "C:\Users\mheath\Downloads\message.txt"
+$downloadPath = "$home\Downloads\message.txt"
 az storage file download -s $shareName -p "message.txt" `
     --dest $downloadPath
 Start-Process $downloadPath

@@ -5,19 +5,20 @@ az group create -n $resourceGroup -l $location
 
 # create a docker container using the ghost image from dockerhub
 $containerGroupName = "ghost-blog1"
+$dnsNameLabel = "ghostaci"
 az container create -g $resourceGroup -n $containerGroupName `
     --image ghost `
     --ports 2368 `
     --ip-address public `
-    --dns-name-label ghostaci 
+    --dns-name-label $dnsNameLabel
 
 # see details about this container
 az container show `
     -g $resourceGroup -n $containerGroupName
 
 # test it out
-http://ghostaci.westeurope.azurecontainer.io:2368
-http://ghostaci.westeurope.azurecontainer.io:2368/admin
+Start-Process "http://$dnsNameLabel.westeurope.azurecontainer.io:2368"
+Start-Process "http://$dnsNameLabel.westeurope.azurecontainer.io:2368/admin"
 
 # view the logs
 az container logs `
