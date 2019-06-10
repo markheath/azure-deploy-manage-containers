@@ -38,7 +38,7 @@ kubectl version --short
 # update path to be able to find kubectl:
 ### $env:path += ';C:\Users\mheath\.azure-kubectl'
 
-# 5. Get credentials and set up for kubectl to use
+# 5. Get credentials and set up for kubectl to use (may need to confirm to overwrite existing kubeconfig entries)
 az aks get-credentials -g $resourceGroup -n $clusterName
 
 # 6. Check we're connected
@@ -46,7 +46,7 @@ kubectl get nodes
 
 # example output:
 #NAME                       STATUS    ROLES     AGE       VERSION
-#aks-nodepool1-29826014-0   Ready     agent     59m       v1.7.7
+#aks-nodepool1-29826014-0   Ready     agent     59m       v1.12.8
 
 # PART 3 - Running an app on AKS
 # https://github.com/Azure-Samples/azure-voting-app-redis
