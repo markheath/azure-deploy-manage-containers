@@ -9,7 +9,8 @@ $resourceGroup = "PluralsightAcr"
 az group create -n $resourceGroup -l westeurope
 
 # create a new Azure container registry
-$registryName = "pluralsightacr"
+# IMPORTANT - use your own name here - it must be unique
+$registryName = "exampleacr1234"
 az acr create -g $resourceGroup -n $registryName --sku Basic
 
 # log in to our container registry

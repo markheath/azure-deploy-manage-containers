@@ -1,3 +1,5 @@
+# you need to be in the current folder of SampleWebApp to run this
+
 # build our docker image and tag it v2
 docker build -t samplewebapp:v2 -f multi-stage.Dockerfile .
 
