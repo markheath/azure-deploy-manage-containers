@@ -1,5 +1,5 @@
 # start a new container running postgres with an attached volume
-docker run -d -p 5432:5432 -v postgres-data:/var/lib/postgresql/data `
+docker run -e POSTGRES_PASSWORD=password -d -p 5432:5432 -v postgres-data:/var/lib/postgresql/data `
 --name postgres1 postgres
 
 # run an interactive shell against our container
@@ -20,7 +20,7 @@ docker rm -f postgres1
 docker volume ls
 
 # start a brand new container connected to the same volume
-docker run -d -p 5432:5432 -v postgres-data:/var/lib/postgresql/data `
+docker run -e POSTGRES_PASSWORD=password -d -p 5432:5432 -v postgres-data:/var/lib/postgresql/data `
 --name postgres2 postgres
 
 # run an interactive shell against this container
