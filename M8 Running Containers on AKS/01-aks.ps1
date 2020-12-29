@@ -93,11 +93,15 @@ kubectl get service --watch
 # change the vote deployment to 3 replicas with eggs and bacon
 kubectl apply -f .\example-vote-v2.yml
 
+# enable the kube-dashboard
+az aks enable-addons --addons kube-dashboard -g $resourceGroup -n $clusterName
+
 # run kubernetes dashboard
 az aks browse -g $resourceGroup -n $clusterName
 
 # n.b. if the dashboard shows errors, you may need this fix:
 # https://pascalnaber.wordpress.com/2018/06/17/access-dashboard-on-aks-with-rbac-enabled/
+# https://thorsten-hans.com/access-kubernetes-dashboard-on-rbac-enabled-azure-kubernetes
 kubectl create clusterrolebinding kubernetes-dashboard -n kube-system --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
 
 ### BONUS STEPS
