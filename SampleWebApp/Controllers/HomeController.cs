@@ -12,9 +12,9 @@ namespace SampleWebApp.Controllers
     public class HomeController : Controller
     {
         private readonly IConfiguration config;
-        private readonly IHostingEnvironment hostingEnv;
+        private readonly IWebHostEnvironment hostingEnv;
         private readonly IHttpClientFactory httpClientFactory;
-        public HomeController(IConfiguration config, IHostingEnvironment hostingEnv,
+        public HomeController(IConfiguration config, IWebHostEnvironment hostingEnv,
             IHttpClientFactory httpClientFactory)
         {
             this.config = config;
